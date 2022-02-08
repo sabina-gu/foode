@@ -1,0 +1,31 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: RootQuery
+    mutation: RootMutation
+}
+
+type AuthLogin {
+    token: String!
+    tokenExpiration: Int!
+    userId: ID!
+}
+
+type RootMutation {
+    register(UserInput: UserInput): User
+}
+
+type RootQuery {
+    login(email: String!, password: String!): AuthLogin
+}
+
+type User {
+    _id: ID!
+    email: String!
+    password: String
+}
+
+input UserInput {
+    email: String!
+    password: String!
+}
