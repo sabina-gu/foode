@@ -1,4 +1,3 @@
-import { onError } from "@apollo/client/link/error";
 import { useQuery } from "@apollo/react-hooks";
 import axios from "axios";
 import { GraphQLError } from "graphql";
@@ -31,7 +30,9 @@ const Login = () => {
   const ErrorEmailMessage = "User doesn't exist";
   const ErrorPasswordMessage = "Password is incorrect";
 
-  const { data } = useQuery(LOGIN);
+  const { data, loading, error } = useQuery(LOGIN, {
+    variables: { email: emailEl, password: passwordEl }
+  });
 
   const onSubmitHandler = event => {
     event.preventDefault();
@@ -42,28 +43,36 @@ const Login = () => {
     }
 
     axios
-      .post(URL, login, HEADERS)
+      .post(URL, LOGIN, HEADERS)
 
       .then(resData => {
         console.log(resData);
-
-        if (resData.data.data.login.token) {
-          setEmailError(false);
-          setPasswordError(false);
-          ContextLogin.login(
-            resData.data.data.login.token,
-            resData.data.data.login.userId,
-            resData.data.data.login.tokenExpiration
-          );
-          router.push(
-            ROUTES.profile.profile.replace(
-              "[id]",
-              `user/${resData.data.data.login.userId}`
-            )
-          );
+        try {
+          if (resData.data.data.login.token) {
+            setEmailError(false);
+            setPasswordError(false);
+            ContextLogin.login(
+              resData.data.data.login.token,
+              resData.data.data.login.userId,
+              resData.data.data.login.tokenExpiration
+            );
+            router.push(
+              ROUTES.profile.profile.replace(
+                "[id]",
+                `user/${resData.data.data.login.userId}`
+              )
+            );
+          }
+        } catch (error) {
+          console.log(error.message);
         }
       });
+
+        .catch(error => {
+        console.log(error.message);
+      });
   };
+
   return (
     <Wrapper>
       <WrapperInside>
