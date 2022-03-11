@@ -25,22 +25,6 @@ export const Highlighted = styled.a`
   }
 `;
 
-export const Submit = styled.button`
-  background-color: #00bc87;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  padding: 18px 35px;
-  width: 100%;
-
-  :hover {
-    background-color: #07ad7e;
-  }
-`;
-
 export const Wrapper = styled.div`
   align-items: center;
   display: flex;

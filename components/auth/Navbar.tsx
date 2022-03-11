@@ -1,3 +1,4 @@
+import Button from "@material-ui/core/Button";
 import { useContext } from "react";
 import styled from "styled-components";
 
@@ -9,7 +10,17 @@ export const Navbar = () => {
     <Wrapper>
       <UlList>
         <List>
-          <LogoutButton onClick={ContextNav.logout}>Log out</LogoutButton>
+          <Button
+            style={{
+              backgroundColor: "#07ad7e",
+              padding: "5px",
+              fontSize: "11px",
+              color: "white"
+            }}
+            onClick={ContextNav.logout}
+          >
+            Log out
+          </Button>
         </List>
       </UlList>
     </Wrapper>
@@ -37,15 +48,4 @@ const List = styled.a`
 
 const UlList = styled.a`
   margin-right: 100px;
-`;
-
-const LogoutButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-
-  :hover {
-    color: #00bc87;
-  }
 `;

@@ -1,14 +1,18 @@
+import Confetti from "react-confetti";
+import useWindowSize from "react-use/lib/useWindowSize";
 import styled from "styled-components";
 
-import Navbar from "../../components/auth/navbar";
+import { Navbar } from "../../components/auth/Navbar";
 import Welcome from "../../public/assets/images/Welcome.svg?sprite";
 
-const PageLogged = () => {
+const PageLogged = (): JSX.Element => {
+  const { width, height } = useWindowSize();
   return (
     <>
       <Navbar />
       <Wrapper>
         <Welcome />
+        <Confetti width={width} height={height} />
       </Wrapper>
     </>
   );

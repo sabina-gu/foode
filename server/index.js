@@ -1,32 +1,3 @@
-/*
-const express = require("express");
-const mongoose = require("mongoose");
-const config = require("config");
-const authRouter = require("./routes/auth.routes");
-
-const app = express();
-const PORT = config.get("serverPort");
-const corsMiddleware = require("./middleware/cors.middleware");
-
-app.use(corsMiddleware);
-app.use(express.json());
-app.use("/api/auth", authRouter);
-
-const start = async () => {
-  try {
-    await mongoose.connect(config.get("dbUrl"));
-
-    app.listen(PORT, () => {
-      console.log("Server started on port ", PORT);
-    });
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-start();
-*/
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const { graphqlHTTP } = require("express-graphql");
@@ -51,16 +22,21 @@ app.use(
     schema: buildSchema(`
     
     schema{
-    query: RootQuery
     mutation: RootMutation
+   query: RootQuery
     }
     
     
     
     type RootMutation {
-    register (UserInput: UserInput): User
-
+    signup (email: String!, password: String!): User
+    login(email: String!, password: String!): AuthLogin
     }
+    
+      type RootQuery{
+      _dummy: String
+      }
+     
     
               type User {
         _id: ID!
@@ -69,16 +45,8 @@ app.use(
      
         }
         
-      input UserInput {
-      email: String!
-       password: String!
-    }
     
-    
-    type RootQuery{
-    login(email: String!, password: String!): AuthLogin
-    }
-    
+  
        
       
         type AuthLogin {
@@ -90,17 +58,17 @@ app.use(
         
   `),
     rootValue: {
-      register: args => {
-        return User.findOne({ email: args.UserInput.email })
+      signup: args => {
+        return User.findOne({ email: args.email })
           .then(user => {
             if (user) {
               throw new Error("User exists already");
             }
-            return bcrypt.hash(args.UserInput.password, 12);
+            return bcrypt.hash(args.password, 12);
           })
           .then(hashedPassword => {
             const user = new User({
-              email: args.UserInput.email,
+              email: args.email,
               password: hashedPassword
             });
 

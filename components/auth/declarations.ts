@@ -1,8 +1,4 @@
-import { FormikErrors } from "formik";
-
-export type LoginForm = {
+export type RegistrationFormFields = {
   email: string;
   password: string;
 };
-
-export type LoginFormErrors = FormikErrors<LoginForm>;

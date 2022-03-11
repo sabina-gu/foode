@@ -1,32 +1,34 @@
-import styled from "styled-components";
+import TextField from "@material-ui/core/TextField";
+import React, { FC, forwardRef } from "react";
 
-const Input = (props): JSX.Element => (
-  <InputForm
-    value={props.value}
-    type={props.type}
-    placeholder={props.placeholder}
-    ref={props.forwardedRef}
-  />
+export type InputProps = {
+  type: string;
+  label: string;
+  placeholder?: string;
+  error: boolean;
+  helperText: string | undefined;
+};
+
+export const Input: FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
+  (
+    { label, type, placeholder, helperText, error, ...props }: InputProps,
+    ref
+  ) => {
+    return (
+      <TextField
+        variant="outlined"
+        margin="normal"
+        fullWidth
+        inputRef={ref}
+        type={type}
+        label={label}
+        helperText={helperText}
+        placeholder={placeholder}
+        error={error}
+        {...props}
+      />
+    );
+  }
 );
 
-export default Input;
-
-const InputForm = styled.input`
-  border: 3px solid black;
-  border-radius: 3px;
-  box-sizing: border-box;
-  height: 60px;
-  margin-bottom: 20px;
-  padding-left: 10px;
-  width: 100%;
-
-  ::placeholder {
-    color: #b3b3b3;
-  }
-
-  :focus {
-    border: 3px solid #5551ff;
-    box-shadow: 0 0 5px #719ece;
-    outline: none !important;
-  }
-`;
+Input.displayName = "Input";

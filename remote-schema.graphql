@@ -12,20 +12,16 @@ type AuthLogin {
 }
 
 type RootMutation {
-    register(UserInput: UserInput): User
+    login(email: String!, password: String!): AuthLogin
+    signup(email: String!, password: String!): User
 }
 
 type RootQuery {
-    login(email: String!, password: String!): AuthLogin
+    _dummy: String
 }
 
 type User {
     _id: ID!
     email: String!
     password: String
-}
-
-input UserInput {
-    email: String!
-    password: String!
 }

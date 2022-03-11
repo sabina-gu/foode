@@ -30,6 +30,8 @@
     "import/newline-after-import": "error",
     "import/no-unresolved": 0,
 
+    "react/prop-types": "off",
+
     "@typescript-eslint/camelcase": "off",
     "better-styled-components/sort-declarations-alphabetically": 2,
     "react-hooks/rules-of-hooks": "error",
@@ -64,7 +66,7 @@
     {
       "files": ["*.js"],
       "rules": {
-        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-var-requires": "off"
       }
     }
   ]
