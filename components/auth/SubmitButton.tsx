@@ -11,13 +11,7 @@ const SubmitButton = ({ children, ...props }: Props) => {
       fullWidth
       variant="contained"
       {...props}
-      style={{
-        backgroundColor: "#07ad7e",
-        padding: "18px 36px",
-        margin: "10px 0",
-        fontSize: "12px",
-        color: "white"
-      }}
+      style={{}}
     >
       {children}
     </StyledButton>
@@ -27,5 +21,16 @@ const SubmitButton = ({ children, ...props }: Props) => {
 export default SubmitButton;
 
 const StyledButton = styled(Button)`
-  color: aquamarine;
+  &.MuiButton-contained {
+    background-color: #07ad7e;
+
+    color: #fff;
+    font-size: 12px;
+    margin: 10px 0;
+    padding: 18px 36px;
+
+    :hover {
+      background-color: #07ad7e;
+    }
+  }
 `;

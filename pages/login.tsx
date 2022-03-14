@@ -20,12 +20,16 @@ import AuthContext from "../components/context/auth-context";
 import { LOGIN } from "../components/graphql";
 import ROUTES from "../constants/routes";
 
+const ErrorEmailMessage = "User  doesn't exists";
+const ErrorPasswordMessage = "Password is incorrect";
+
 const schema = object().shape({
   email: string().email("Invalid email").required("No email provided."),
   password: string()
     .required("No password provided.")
     .min(5, "Password is too short - should be 5 chars minimum.")
     .max(32)
+    .matches(/[a-zA-Z]/, "Password can only contain Latin letters.")
 });
 const Login: FC = () => {
   const router = useRouter();
@@ -40,54 +44,45 @@ const Login: FC = () => {
   });
 
   const ContextLogin = useContext(AuthContext);
-  const ErrorEmailMessage = "User  doesn't exists";
-  const ErrorPasswordMessage = "Password is incorrect";
 
   const [login] = useMutation(LOGIN);
 
-  const onSubmitHandler = ({ email, password }: RegistrationFormFields) => {
-    console.log(email, password);
-
-    login({
-      variables: { email: email, password: password }
-    })
-      .then(res => {
-        if (email.trim().length === 0 || password.trim().length === 0) {
-          return;
-        }
-        console.log(res.data.login.token);
-
-        if (res.data.login.token) {
-          ContextLogin.login(
-            res.data.login.token,
-            res.data.login.userId,
-            res.data.login.tokenExpiration
-          );
-          router.push(
-            ROUTES.profile.profile.replace(
-              "[id]",
-              `user/${res.data.login.userId}`
-            )
-          );
-        }
-      })
-
-      .catch(error => {
-        const errors = error.graphQLErrors[0].message;
-        if (errors === ErrorEmailMessage) {
-          setError("email", {
-            type: "server",
-            message: ErrorEmailMessage
-          });
-        }
-
-        if (errors === ErrorPasswordMessage) {
-          setError("password", {
-            type: "server",
-            message: ErrorPasswordMessage
-          });
-        }
+  const onSubmitHandler = async ({
+    email,
+    password
+  }: RegistrationFormFields) => {
+    try {
+      const result = await login({
+        variables: { email: email, password: password }
       });
+      if (email.trim().length === 0 || password.trim().length === 0) {
+        return;
+      }
+
+      const res = result.data.login;
+
+      if (res.token) {
+        ContextLogin.login(res.token, res.userId, res.tokenExpiration);
+        router.push(
+          ROUTES.profile.profile.replace("[id]", `user/${res.userId}`)
+        );
+      }
+    } catch (error: any) {
+      const errors = error.graphQLErrors[0].message;
+      if (errors === ErrorEmailMessage) {
+        setError("email", {
+          type: "server",
+          message: ErrorEmailMessage
+        });
+      }
+
+      if (errors === ErrorPasswordMessage) {
+        setError("password", {
+          type: "server",
+          message: ErrorPasswordMessage
+        });
+      }
+    }
   };
 
   return (

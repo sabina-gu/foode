@@ -25,6 +25,9 @@ const schema = object().shape({
     .min(5, "Password is too short - should be 5 chars minimum.")
     .matches(/[a-zA-Z]/, "Password can only contain Latin letters.")
 });
+
+const ErrorEmailMessage = "User exists already";
+
 const Signup = (): JSX.Element => {
   const router = useRouter();
   const {
@@ -37,36 +40,38 @@ const Signup = (): JSX.Element => {
     resolver: yupResolver(schema)
   });
 
-  const ErrorEmailMessage = "User exists already";
-
   const [signup] = useMutation(SIGNUP);
 
-  const onSubmitHandler = ({ email, password }: RegistrationFormFields) => {
-    signup({
-      variables: { email: email, password: password }
-    })
-      .then(res => {
-        if (email.trim().length === 0 || password.trim().length === 0) {
-          return;
-        }
-        console.log(res, email, password);
-        router.push(
-          ROUTES.profile.profile.replace(
-            "[id]",
-            `user/${res.data.signup.userId}`
-          )
-        );
-      })
-      .catch(error => {
-        console.log(error);
-        const errors = error.graphQLErrors[0].message;
-        if (errors === ErrorEmailMessage) {
-          setError("email", {
-            type: "server",
-            message: ErrorEmailMessage
-          });
-        }
+  const onSubmitHandler = async ({
+    email,
+    password
+  }: RegistrationFormFields) => {
+    try {
+      const result = await signup({
+        variables: { email: email, password: password }
       });
+
+      console.log(result);
+
+      if (email.trim().length === 0 || password.trim().length === 0) {
+        return;
+      }
+
+      router.push(
+        ROUTES.profile.profile.replace("[id]", `user/${result.data.signup._id}`)
+      );
+    } catch (error: any) {
+      console.log(error);
+      const errors = error.graphQLErrors[0].message;
+      if (errors === ErrorEmailMessage) {
+        setError("email", {
+          type: "server",
+          message: ErrorEmailMessage
+        });
+      } else {
+        throw error;
+      }
+    }
   };
 
   return (

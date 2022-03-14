@@ -13,7 +13,7 @@ import Fonts from "../Fonts.js";
 type LoginProps = {
   token: string | null;
   userId: string | null;
-  tokenExpiration: number | null;
+  tokenExpiration?: number | null;
 };
 
 function App({ Component, pageProps }: AppProps) {
@@ -21,13 +21,13 @@ function App({ Component, pageProps }: AppProps) {
   const [token, setToken] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
 
-  const logout = () => {
+  const logout = (): void => {
     setToken(null);
     setUserId(null);
     router.push(ROUTES.profile.profile.replace("[id]", "login"));
   };
 
-  const login = ({ token, userId }: LoginProps) => {
+  const login = ({ token, userId }: LoginProps): void => {
     setToken(token);
     setUserId(userId);
   };
