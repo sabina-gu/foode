@@ -67,7 +67,7 @@ const Login: FC = () => {
           ROUTES.profile.profile.replace("[id]", `user/${res.userId}`)
         );
       }
-    } catch (error: any) {
+    } catch (error) {
       const errors = error.graphQLErrors[0].message;
       if (errors === ErrorEmailMessage) {
         setError("email", {

@@ -1,6 +1,6 @@
 {
   "serverPort": "8080",
-  "dbUrl": "mongodb+srv://rosenrot:sabba1234@cluster0.mfoev.mongodb.net/gmeal?retryWrites=true&w=majority",
+  "dbUrl": "mongodb+srv://rosenrot:****@cluster0.mfoev.mongodb.net/gmeal?retryWrites=true&w=majority",
   "secretKey": "gmeal-secret-key"
 }
 
